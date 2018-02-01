@@ -71,8 +71,8 @@ app.get("/scrape", function (req, res) {
 
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
-    // Grab every document in the Articles collection
-    db.Article.find({})
+    // Grab every document in the first 20 Articles collection
+    db.Article.find({}).limit(20)
       .then(function(dbArticle) {
         // If we were able to successfully find Articles, send them back to the client
         res.json(dbArticle);
@@ -82,6 +82,44 @@ app.get("/articles", function(req, res) {
         res.json(err);
       });
   });
+  //update saved article in db
+  app.post("/api/article/update", function(req, res){
+    
+    // need to use JSON.parse here to get the string of "false" or "true" and make it boolean false or true
+    var isSaved = (JSON.parse(req.body.isSaved)) 
+    
+    db.Article.findByIdAndUpdate(req.body.id, {
+        $set: {
+            "isSaved": isSaved
+        }
+    }).then(function(data){
+        res.redirect("/");
+    }).catch(function(err){
+        res.json(err);
+    });
+});
+
+// Route for getting all Saved Articles from the db
+app.get("/savedArticles", function(req, res) {
+    // Grab every document in the first 20 Articles collection
+    db.Article.find({isSaved: true})
+      .then(function(dbArticle) {
+        // If we were able to successfully find Articles, send them back to the client
+        res.json(dbArticle);
+      })
+      .catch(function(err) {
+        // If an error occurred, send it to the client
+        res.json(err);
+      });
+  });
+  // delete articles by id
+  app.post("/api/articles/delete", function(req, res){
+    db.Student.findByIdAndRemove(req.body.id).then(function(data){
+        res.redirect("/");
+    }).catch(function(err){
+        res.json(err);
+    });
+});
 
 // Start the server
 app.listen(PORT, function () {
