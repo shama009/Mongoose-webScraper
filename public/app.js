@@ -1,6 +1,28 @@
 $(document).ready(function () {
     // Grab the articles as a json
-    $.getJSON("/articles", function (data) {
+        $.getJSON("/articles", function (data) {
+            // For each one
+            $(".articles").empty();
+            for (var i = 0; i < data.length; i++) {
+                // Display the apropos information on the page
+                var panelDiv = $("<div class='panel panel-default'>");
+                var panelHeadingDiv = $("<div class='panel-heading'>").append("<h3 id='heading' data-id='" + data[i]._id + "'><a class='article-link' href=" + data[i].link + " target='_blank'>" + data[i].title +
+                    "</a>&nbsp;&nbsp;&nbsp;<a class='btn btn-success' id='saveArticle'>Save Article</a></h3>");
+                var panelBodyDiv = $("<div class='panel-body' id='summary'>").append("<p>" + data[i].summary + "</p>");
+                panelDiv.append(panelHeadingDiv).append(panelBodyDiv);
+                $(".articles").append(panelDiv);
+            }
+        });
+
+    // scrape new articles
+    $("#scrape").on("click", function () {
+        $.getJSON("/scrape", function () {
+            refreshPage();
+        });
+    });
+    $("#savedArticles").on("click", function(){
+    // Grab the saved articles as a json
+    $.getJSON("/savedArticles", function (data) {
         // For each one
         $(".articles").empty();
         for (var i = 0; i < data.length; i++) {
@@ -13,11 +35,6 @@ $(document).ready(function () {
             $(".articles").append(panelDiv);
         }
     });
-    // scrape new articles
-    $("#scrape").on("click", function () {
-        $.getJSON("/scrape", function () {
-            refreshPage();
-        });
     });
     // save articles
     $(document).on("click", "#saveArticle", function () {
