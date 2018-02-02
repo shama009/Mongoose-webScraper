@@ -1,0 +1,39 @@
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Mongoose Scraper</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active">
+                <a href="#">Home</a>
+            </li>
+            <li>
+                <a href="#">Saved Articles</a>
+            </li>
+        </ul>
+        <button class="btn btn-danger navbar-btn">Scrape New Articles</button>
+    </div>
+</nav>
+<div class="jumbotron text-center">
+    <h1>Mongo Scraper</h1>
+    <p>New York Times Edition</p>
+</div>
+<div class="articles">
+    {{#each article}}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <a href={{this.link}}>{{this.title}}</a>
+            <a class="btn btn-success save">Save Article</a>
+        </div>
+        <div class="panel-body">
+            <p>{{this.summary}}</p>
+        </div>
+    </div>
+    {{/each}}
+</div>
+<footer class="footer">
+    <div class="container-fluid">
+        <span class="text-muted">New York Times Mongo Scraper.</span>
+    </div>
+</footer>
+</div>

@@ -32,7 +32,20 @@ mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
 // Routes
-
+// Route for getting all Articles from the db
+app.get("/", function (req, res) {
+  // Grab every document in the first 20 Articles collection
+  db.Article.find({}).limit(20)
+    .then(function (dbArticle) {
+      // If we were able to successfully find Articles, send them back to the client
+      console.log(dbArticle);
+      res.render("allArticles", {article: dbArticle});
+    })
+    .catch(function (err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+});
 // A GET route for scraping the nytimes website
 app.get("/scrape", function (req, res) {
   // First, we grab the body of the html with request
@@ -60,6 +73,7 @@ app.get("/scrape", function (req, res) {
         .then(function (dbArticle) {
           // View the added result in the console
           console.log(dbArticle);
+          //res.redirect("/");
         })
         .catch(function (err) {
           // If an error occurred, send it to the client
@@ -68,23 +82,13 @@ app.get("/scrape", function (req, res) {
     });
 
     // If we were able to successfully scrape and save an Article, send a message to the client
-    res.send("Scrape Complete");
+   // res.send("Scrape Complete");
+   res.redirect("/");
+   
   });
 });
 
-// Route for getting all Articles from the db
-app.get("/", function (req, res) {
-  // Grab every document in the first 20 Articles collection
-  db.Article.find({}).limit(20)
-    .then(function (dbArticle) {
-      // If we were able to successfully find Articles, send them back to the client
-      res.json(dbArticle);
-    })
-    .catch(function (err) {
-      // If an error occurred, send it to the client
-      res.json(err);
-    });
-});
+
 //update saved article in db
 app.post("/api/article/update", function (req, res) {
 
