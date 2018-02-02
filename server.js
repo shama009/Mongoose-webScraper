@@ -49,7 +49,6 @@ app.get("/articles", function (req, res) {
 });
 // A GET route for scraping the nytimes website
 app.get("/scrape", function (req, res) {
-  // db.Article.remove({}).then(function () {
   var articleArray = [];
   // First, we grab the body of the html with request
   axios.get("http://www.nytimes.com/").then(function (response) {
@@ -85,13 +84,7 @@ app.get("/scrape", function (req, res) {
         return res.json(err);
       });
 
-    // If we were able to successfully scrape and save an Article, send a message to the client
-    //res.send("Done!");
-    // res.redirect("/");
-    //res.sendFile(path.join(__dirname, "index.html"));
-
   });
-  // });
 });
 
 
