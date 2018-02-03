@@ -14,7 +14,7 @@ $(document).ready(function () {
             }
         });
 
-    // scrape new articles
+    //scrape new articles
     $("#scrape").on("click", function () {
         $.getJSON("/scrape", function () {
             refreshPage();
@@ -29,7 +29,7 @@ $(document).ready(function () {
             // Display the apropos information on the page
             var panelDiv = $("<div class='panel panel-default'>");
             var panelHeadingDiv = $("<div class='panel-heading'>").append("<h3 id='heading' data-id='" + data[i]._id + "'><a class='article-link' href=" + data[i].link + " target='_blank'>" + data[i].title +
-                "</a>&nbsp;&nbsp;&nbsp;<a class='btn btn-success saveArticle'>Save Article</a></h3>");
+                "</a>&nbsp;&nbsp;&nbsp;<a class='btn btn-success' id='saveArticle'>Save Article</a></h3>");
             var panelBodyDiv = $("<div class='panel-body' id='summary'>").append("<p>" + data[i].summary + "</p>");
             panelDiv.append(panelHeadingDiv).append(panelBodyDiv);
             $(".articles").append(panelDiv);
@@ -37,7 +37,7 @@ $(document).ready(function () {
     });
     });
     // save articles
-    $(document).on("click", ".saveArticle", function () {
+    $(document).on("click", "#saveArticle", function () {
         // AJAX POST call to the submit route on the server
         // This will take the data from the form and send it to the server
         $.ajax({

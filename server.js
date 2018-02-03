@@ -37,7 +37,7 @@ app.get("/articles", function (req, res) {
   db.Article.find({ isSaved: false }).limit(20)
     .then(function (dbArticle) {
       // If we were able to successfully find Articles, send them back to the client
-      console.log(dbArticle);
+      //console.log(dbArticle);
       // res.render("allArticles", {article: dbArticle});
       //res.render("test");
       res.json(dbArticle);
@@ -69,21 +69,27 @@ app.get("/scrape", function (req, res) {
         .attr("href");
       result.summary = $(this)
         .children("p.summary").text();
-
-      articleArray.push(result);
+      if(result.title && result.link && result.summary){
+        articleArray.push(result);
+      }
     });
     console.log(articleArray);
-    db.Article.insertMany(articleArray)
+    db.Article.remove({isSaved:false}).then(function(){
+      db.Article.insertMany(articleArray)
       .then(function (dbArticle) {
         // View the added result in the console
         console.log(dbArticle);
         res.redirect("/");
+        //res.sendFile(path.join(__dirname, "index.html"));
       })
       .catch(function (err) {
         // If an error occurred, send it to the client
         return res.json(err);
       });
-
+    }).catch(function(err){
+      // If an error occurred, send it to the client
+      return res.json(err);
+    });
   });
 });
 
@@ -104,9 +110,9 @@ app.post("/api/article/update", function (req, res) {
     //res.redirect("/articles");
     console.log("updated");
     console.log(data);
-    res.json(data);
-    //res.redirect("/articles");
-    //res.sendFile(path.join(__dirname, "index.html"));
+    //res.json(data);
+    //res.redirect("/");
+    res.sendFile(path.join(__dirname, "index.html"));
   }).catch(function (err) {
     res.json(err);
   });
