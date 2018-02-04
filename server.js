@@ -74,7 +74,7 @@ app.get("/scrape", function (req, res) {
       }
     });
     console.log(articleArray);
-    db.Article.remove({isSaved:false}).then(function(){
+    db.Article.remove().then(function(){
       db.Article.insertMany(articleArray)
       .then(function (dbArticle) {
         // View the added result in the console
